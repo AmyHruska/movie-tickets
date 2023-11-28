@@ -20,18 +20,18 @@ function Ticket(movie, basePrice){
   this.basePrice = basePrice;
 }
 
-Ticket.prototype.agePriceAdjustment = function() {
+Ticket.prototype.agePriceAdjustment = function(userAge) {
     if(userAge >= 65 || userAge <= 12){
       this.basePrice = this.basePrice * .85;
     }
     return this.basePrice.toFixed(2);
 }
 
-Ticket.prototype.timePriceAdjustment = function() {
-    if(matinee === true){
+Ticket.prototype.timePriceAdjustment = function(matinee) {
+    if(matinee === "0"){
       this.basePrice = this.basePrice * .85;
     }
-    return this.basePrice.toFixed(2);
+    return this.basePrice;
 }
 
 // UI logic
@@ -43,12 +43,13 @@ moviesList.addTicket(movie2); // inputting faux entry into faux database
 
 function movieFormHandler(event) {
     event.preventDefault();
-    const movieName = document.getElementById("movieName").value;
-    const timeOfDay = document.getElementById("timeOfDay").value;
-    const age = parseInt(document.getElementById("age").value);
-    let newMovie = new Ticket(movieName, timeOfDay, age);
-    moviesList.addTicket(newMovie);
-    console.log(moviesList)
+    const movieId = document.getElementById("movieName").value;
+    const matinee = document.getElementById("timeOfDay").value;
+    const userAge = parseInt(document.getElementById("age").value);
+    moviesList.tickets[movieId].timePriceAdjustment(matinee);
+    moviesList.tickets[movieId].agePriceAdjustment(userAge);
+    moviesList.tickets[movieId].basePrice.toFixed(2);
+    console.log(moviesList.tickets[movieId].basePrice);
 }
 
 window.addEventListener("load", function() {
